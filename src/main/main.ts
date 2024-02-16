@@ -179,6 +179,30 @@ ipcMain.handle('get', (event, query) => {
   });
 });
 
+ipcMain.handle('destroy', (event, query) => {
+  return new Promise((resolve, reject) => {
+    db.run(query, (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+});
+
+ipcMain.handle('destroyAll', (event, query) => {
+  return new Promise((resolve, reject) => {
+    db.run(query, (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+});
+
 ipcMain.handle('store', (event, query, params) => {
   return new Promise((resolve, reject) => {
     db.run(query, params, function (err) {

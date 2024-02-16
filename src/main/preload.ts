@@ -41,10 +41,18 @@ const electronHandler = {
           .catch((error) => reject(error));
       });
     },
-    delete(id: number): Promise<unknown> {
+    destroy(id: number): Promise<unknown> {
       return new Promise((resolve, reject) => {
         ipcRenderer
-          .invoke('delete', `DELETE FROM lots WHERE id = ${id}`)
+          .invoke('destroy', `DELETE FROM lots WHERE id = ${id}`)
+          .then((result) => resolve(result))
+          .catch((error) => reject(error));
+      });
+    },
+    destroyAll(): Promise<unknown> {
+      return new Promise((resolve, reject) => {
+        ipcRenderer
+          .invoke('destroyAll', 'DELETE FROM lots')
           .then((result) => resolve(result))
           .catch((error) => reject(error));
       });

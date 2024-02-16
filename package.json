@@ -103,8 +103,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^5.0.1",
-    "react-router-dom": "^6.16.0",
-    "sqlite3": "^5.1.7"
+    "react-router-dom": "^6.16.0"
   },
   "devDependencies": {
     "@electron/notarize": "^2.1.0",
@@ -162,6 +161,7 @@
     "rimraf": "^5.0.1",
     "sass": "^1.67.0",
     "sass-loader": "^13.3.2",
+    "sqlite3": "^5.1.7",
     "style-loader": "^3.3.3",
     "tailwindcss": "^3.4.1",
     "terser-webpack-plugin": "^5.3.9",
@@ -178,7 +178,7 @@
     "webpack-merge": "^5.9.0"
   },
   "build": {
-    "productName": "ElectronReact",
+    "productName": "Iventari-LFG",
     "appId": "org.erb.ElectronReact",
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",

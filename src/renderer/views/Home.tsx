@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import 'tailwindcss/tailwind.css';
 import Table from '../components/Table';
 import InputTxt from '../components/InputTxt';
+import DeleteModal from '../components/DeleteModal';
 
 function Home() {
   interface Lot {
@@ -9,7 +10,18 @@ function Home() {
     zona: string;
     data: string;
   }
+
   const [lots, setLots] = useState<Lot[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   //Getting the data from the database
   useEffect(() => {
     const runQuery = async () => {
@@ -31,13 +43,14 @@ function Home() {
     } catch (error) {
       console.error('Error storing lot:', error);
     }
-  }
+  };
 
   const now = new Date().toLocaleString();
 
   const handleClick = () => {
     const newZona = document.querySelector('#zona') as HTMLInputElement;
     const newLot = document.querySelector('#lot') as HTMLInputElement;
+
     if (
       newZona.value !== '' &&
       newLot.value !== '' &&
@@ -64,12 +77,42 @@ function Home() {
     }
   };
 
+  const destroyAll = async () => {
+    try {
+      const result = await window.electron.db.destroyAll();
+      console.log(result);
+      setLots([]);
+    } catch (error) {
+      console.error('Error removing all lots:', error);
+    }
+
+    closeModal();
+  };
+
   return (
-    <main className="container max-w-xl mx-auto">
+    <main className="container max-w-8xl mx-auto">
       <div className="flex justify-between my-5">
-        <InputTxt placeholder="Introdueix la zona" id="zona" />
+        <button
+          className="bg-red-500 rounded text-gray-100 px-5 py-2 "
+          onClick={openModal}
+        >
+          Esborrar tots els registres
+        </button>
         <div className="[&>*]:mx-2">
-          <InputTxt placeholder="Introdueix el lot" id="lot" />
+          <label htmlFor="name">Zona</label>
+          <InputTxt
+            placeholder="Introdueix La zona"
+            id="zona"
+            onEnter={handleClick}
+            name="lot"
+          />
+        </div>
+        <div className="[&>*]:mx-2">
+          <InputTxt
+            placeholder="Introdueix el lot"
+            id="lot"
+            onEnter={handleClick}
+          />
           <button
             className="bg-gray-800 rounded text-gray-100 px-5 py-2"
             onClick={handleClick}
@@ -83,7 +126,14 @@ function Home() {
           No es pot afegir un lot buit o ja existent!
         </small>
       </div>
-      <Table array={lots} />
+      <Table array={lots} setLots={setLots} />
+      {isModalOpen && (
+        <DeleteModal
+          isOpen={isModalOpen}
+          closeModal={closeModal}
+          handleConfirm={() => destroyAll()}
+        />
+      )}
     </main>
   );
 }
